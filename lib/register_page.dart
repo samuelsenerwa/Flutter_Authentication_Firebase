@@ -23,7 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title:  Text('Register'),
+          title: Text('Register'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -99,49 +99,53 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       SizedBox(height: 32.0),
                       _isProcessing
-                      ? CircularProgressIndicator()
-                      : Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                setState(() {
-                                  _isProcessing = true;
-                                });
+                          ? CircularProgressIndicator()
+                          : Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        _isProcessing = true;
+                                      });
 
-                                if (_registerFormKey.currentState!.validate()) {
-                                  User? user = await FireAuth .registerUsingEmailPassword(
-                                    name: _nameTextController.text,
-                                    email: _emailTextController.text,
-                                    password:_passwordTextController.text,
-                                  );
-                                  setState(() {
-                                    _isProcessing = false;
-                                  });
+                                      if (_registerFormKey.currentState!
+                                          .validate()) {
+                                        User? user = await FireAuth
+                                            .registerUsingEmailPassword(
+                                          name: _nameTextController.text,
+                                          email: _emailTextController.text,
+                                          password:
+                                              _passwordTextController.text,
+                                        );
 
-                                  if (user != null) {
-                                    Navigator.of(context)
-                                    .pushNamedAndRemoveUntil(
-                                      MaterialPageRoute(
-                                        builder: (context) => 
-                                        ProfilePage(user: user),
-                                      ),
-                                      ModalRoute.withName('/'),
-                                    );
-                                  }
-                                }
-                              },
-                              child: Text(
-                              'Sign Up',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            ),
-                          ),
-                        ],
-                      )
+                                        setState(() {
+                                          _isProcessing = false;
+                                        });
+
+                                        if (user != null) {
+                                          Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProfilePage(user: user),
+                                            ),
+                                            ModalRoute.withName('/'),
+                                          );
+                                        }
+                                      }
+                                    },
+                                    child: Text(
+                                      'Sign up',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                     ],
                   ),
-                ),
+                )
               ],
             ),
           ),

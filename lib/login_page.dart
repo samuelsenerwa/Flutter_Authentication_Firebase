@@ -34,15 +34,16 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => ProfilePage(
-                user: user,
+            user: user,
           ),
         ),
       );
     }
+
     return firebaseApp;
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         body: FutureBuilder(
           future: _initializeFirebase(),
-          builder: (context,snapshot) {
+          builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Padding(
                 padding: const EdgeInsets.only(left: 24.0, right: 24.0),
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(bottom: 24.0),
                       child: Text(
                         'Login',
-                        style: Theme.of(context).textTheme.headlineLarge,
+                        style: Theme.of(context).textTheme.headline1,
                       ),
                     ),
                     Form(
@@ -109,71 +110,70 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           SizedBox(height: 24.0),
                           _isProcessing
-                          ? CircularProgressIndicator()
-                          : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    _focusEmail.unfocus();
-                                    _focusPassword.unfocus();
+                              ? CircularProgressIndicator()
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          _focusEmail.unfocus();
+                                          _focusPassword.unfocus();
 
-                                    if (_formKey.currentState!.validate()) {
-                                      setState(() {
-                                        _isProcessing = true;
-                                      });
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            setState(() {
+                                              _isProcessing = true;
+                                            });
 
-                                      User? user = await FireAuth
-                                      .signInUsingEmailPassword(
-                                        context: context,
-                                        email: _emailTextController.text, 
-                                        password: _passwordTextController.text,
-                                        );
+                                            User? user = await FireAuth
+                                                .signInUsingEmailPassword(
+                                              email: _emailTextController.text,
+                                              password:
+                                                  _passwordTextController.text,
+                                            );
 
-                                        setState(() {
-                                          _isProcessing = false;
-                                        });
+                                            setState(() {
+                                              _isProcessing = false;
+                                            });
 
-                                        if (user != null) {
-                                          Navigator.of(context)
-                                          .pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) => 
-                                              ProfilePage(user:user),
-                                            )
-                                          );
-                                        }
-                                    }
-                                  },
-                                  child: const Text(
-                                    'Sign In',
-                                    style: TextStyle(
-                                      color: Colors.white
-                                    ),
-                                  ),
-                                ),
-                               SizedBox(width: 24.0),
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => RegisterPage(),
+                                            if (user != null) {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfilePage(user: user),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        },
+                                        child: Text(
+                                          'Sign In',
+                                          style: TextStyle(color: Colors.white),
                                         ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Register',
-                                      style: TextStyle(
-                                        color: Colors.white
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(width: 24.0),
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RegisterPage(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Register',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 )
-                              )
-                            ],
-                          )
                         ],
                       ),
                     )
@@ -181,6 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             }
+
             return Center(
               child: CircularProgressIndicator(),
             );
