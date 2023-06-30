@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/fire_auth.dart';
 import 'package:firebase_authentication/profile_page.dart';
+import 'package:firebase_authentication/register_page.dart';
 import 'package:firebase_authentication/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -118,13 +119,14 @@ class _LoginPageState extends State<LoginPage> {
                                     _focusEmail.unfocus();
                                     _focusPassword.unfocus();
 
-                                    if (_formKey.currentState !.validate()) {
+                                    if (_formKey.currentState!.validate()) {
                                       setState(() {
                                         _isProcessing = true;
                                       });
 
                                       User? user = await FireAuth
                                       .signInUsingEmailPassword(
+                                        context: context,
                                         email: _emailTextController.text, 
                                         password: _passwordTextController.text,
                                         );
@@ -144,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                                         }
                                     }
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'Sign In',
                                     style: TextStyle(
                                       color: Colors.white
@@ -157,12 +159,11 @@ class _LoginPageState extends State<LoginPage> {
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (context) => 
-                                          RegisterPage(),
+                                          builder: (context) => RegisterPage(),
                                         ),
                                       );
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Register',
                                       style: TextStyle(
                                         color: Colors.white
