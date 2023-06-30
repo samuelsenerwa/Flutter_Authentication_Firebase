@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 
 class FireAuth {
+  // For registering a new user
   static Future<User?> registerUsingEmailPassword({
     required String name,
     required String email,
@@ -9,39 +9,34 @@ class FireAuth {
   }) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
+
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
       user = userCredential.user;
-
-      // send email verification
-      await user?.sendEmailVerification();
-
-      await user!.updateProfile(
-        displayName: name
-      );
+      await user!.updateProfile(displayName: name);
       await user.reload();
       user = auth.currentUser;
-
-
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password is too weak');
+        print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email');
+        print('The account already exists for that email.');
       }
     } catch (e) {
       print(e);
     }
+
     return user;
   }
 
+  // For signing in an user (have already registered)
   static Future<User?> signInUsingEmailPassword({
     required String email,
     required String password,
-    required BuildContext context,
   }) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
@@ -49,33 +44,26 @@ class FireAuth {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
         email: email,
-       password: password,
-       );
-       user = userCredential.user;
-
-    } on FirebaseAuthException catch(e) {
+        password: password,
+      );
+      user = userCredential.user;
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email');
-      } else if(e.code == 'wrong-password') {
-        print('Wrong password provided');
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided.');
       }
     }
+
     return user;
   }
 
-    static Future<void> signOut() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    await auth.signOut();
-  }
-
-  //refresh user
   static Future<User?> refreshUser(User user) async {
-      FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseAuth auth = FirebaseAuth.instance;
 
-      await user.reload();
-      User? refreshedUser = auth.currentUser;
+    await user.reload();
+    User? refreshedUser = auth.currentUser;
 
-      return refreshedUser;
+    return refreshedUser;
   }
-
 }
